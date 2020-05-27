@@ -104,10 +104,8 @@ body {
 </div>
 <h2>Chat Messages- <?php echo $roomname;?></h2>
 <div class="container">
-<div class="anyclass">
-  <img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
-  <p>Hello. How are you today?</p>
-  <span class="time-right">11:00</span>
+<div class="anyClass">
+  
 </div>
 </div>
 </div>
@@ -118,17 +116,36 @@ body {
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script></html>
-<script type="text/javascript">
-        //if user submits the form\
-        var clientmsg=$("#usermsg").val();
 
-        $("#submitmsg").click(function(){
-            $.post("postmsg.php",{text:clientmsg,room:'<?php echo $roomname ?>',ip:'<?php echo $_SERVER['REMOTE_ADDR'] ?>'}), 
+<script   src="https://code.jquery.com/jquery-3.5.1.min.js"   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="   crossorigin="anonymous"></script>
+
+
+<script type="text/javascript">
+//check for new message in 1 second//
+setInterval(runFunction,1000);
+function runFunction(){
+  $.post("htcont.php",{room:'<?php echo $roomname ?>'},
+  function(data,status){
+    document.getElementsByClassName('anyClass')[0].innerHTML=data;
+  })
+}
+var input = document.getElementById("usermsg");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("submitmsg").click();
+  }
+});
+        //if user submits the form        
+         $("#submitmsg").click(function(){        
+          var clientmsg=$("#usermsg").val();
+         
+            $.post("postmsg.php",{text:clientmsg,room:'<?php echo $roomname ?>',ip:'<?php echo $_SERVER['REMOTE_ADDR'] ?>'}, 
             
             function (data,status){
-                document.getElementsByClassName('anyClass')[0].innerHTML=data;};
+                document.getElementsByClassName('anyClass')[0].innerHTML=data;});
+                $("#usermsg").val("");
                                 return false;
-
         });
     </script>
 </body>
